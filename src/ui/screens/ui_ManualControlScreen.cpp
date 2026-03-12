@@ -15,7 +15,6 @@ lv_obj_t *ui_CoolCycleSOLOButton = nullptr;
 lv_obj_t *ui_OperationButton = nullptr;
 lv_obj_t *ui_WallHeaterButton = nullptr;
 lv_obj_t *ui_PumpButton = nullptr;
-
 lv_obj_t *ui_CoreTempLabel = nullptr;
 lv_obj_t *ui_ChamberTempLabel = nullptr;
 
@@ -38,26 +37,88 @@ static void update_button_color(lv_obj_t *btn, bool state)
     lv_obj_set_style_bg_color(btn, color, LV_PART_MAIN);
 }
 
-/* ============================================================
-   BUTTON EVENT HANDLERS (5 relays)
-   ============================================================ */
-
-static void ui_event_DisableSOLO(lv_event_t *e)
+void event_DisableSOLOEnabled(lv_event_t *e)
 {
-    if (lv_event_get_code(e) == LV_EVENT_CLICKED)
+  if (lv_event_get_code(e) == LV_EVENT_CLICKED)
     {
-        stateDisableSOLO = !stateDisableSOLO;
-        update_button_color(ui_DisableSOLOButton, stateDisableSOLO);
-        logState("Disable SOLO", stateDisableSOLO);
 
-        if (stateDisableSOLO)
-            ui_event_DisableSOLOEnabled(e);
-        else
-            ui_event_DisableSOLODisabled(e);
+      //  logState("Disable SOLO");
+
+
+        ui_event_OperationButtonEnabled(e);
+
     }
 }
 
-static void ui_event_CoolCycleSOLO(lv_event_t *e)
+void event_DisableSOLODisabled(lv_event_t *e)
+{
+    {
+
+        ui_event_OperationButtonDisabled(e);
+
+    }
+}
+
+void event_CoolCycleSOLOEnabled(lv_event_t *e)
+{
+
+  ui_event_CoolCycleSOLOEnabled(e);
+
+}
+
+void event_CoolCycleSOLODisabled(lv_event_t *e)
+{
+  ui_event_CoolCycleSOLODisabled(e);
+  
+}
+
+void event_OperationButtonEnabled(lv_event_t *e)
+{
+  ui_event_OperationButtonEnabled(e);
+}
+
+void event_OperationButtonDisabled(lv_event_t *e)
+{
+  ui_event_OperationButtonDisabled(e);
+}
+
+void event_WallHeaterEnabled(lv_event_t *e)
+{
+    ui_event_WallHeaterEnabled(e);
+}
+
+void event_WallHeaterDisabled(lv_event_t *e)
+{
+    ui_event_WallHeaterDisabled(e);
+}
+
+
+void event_PumpButtonEnabled(lv_event_t *e)
+{
+    ui_event_PumpButtonEnabled(e);
+}
+
+void event_PumpButtonDisabled(lv_event_t *e)
+{
+    ui_event_PumpButtonDisabled(e);
+}
+
+
+void event_ChillerButtonEnabled(lv_event_t *e)
+{
+    ui_event_ChillerButtonEnabled(e);
+}
+
+void event_ChillerButtonDisabled(lv_event_t *e)
+{
+    ui_event_ChillerButtonDisabled(e);
+}
+
+/* ============================================================
+   LOCAL WRAPPER EVENT HANDLERS for ManualControlScreen buttons
+   ============================================================ */
+
+static void ui_ManualControl_event_CoolCycleSOLO(lv_event_t *e)
 {
     if (lv_event_get_code(e) == LV_EVENT_CLICKED)
     {
@@ -72,7 +133,7 @@ static void ui_event_CoolCycleSOLO(lv_event_t *e)
     }
 }
 
-static void ui_event_Operation(lv_event_t *e)
+static void ui_ManualControl_event_Operation(lv_event_t *e)
 {
     if (lv_event_get_code(e) == LV_EVENT_CLICKED)
     {
@@ -87,7 +148,7 @@ static void ui_event_Operation(lv_event_t *e)
     }
 }
 
-static void ui_event_WallHeater(lv_event_t *e)
+static void ui_ManualControl_event_WallHeater(lv_event_t *e)
 {
     if (lv_event_get_code(e) == LV_EVENT_CLICKED)
     {
@@ -102,7 +163,7 @@ static void ui_event_WallHeater(lv_event_t *e)
     }
 }
 
-static void ui_event_Pump(lv_event_t *e)
+static void ui_ManualControl_event_Pump(lv_event_t *e)
 {
     if (lv_event_get_code(e) == LV_EVENT_CLICKED)
     {
@@ -114,6 +175,21 @@ static void ui_event_Pump(lv_event_t *e)
             ui_event_PumpButtonEnabled(e);
         else
             ui_event_PumpButtonDisabled(e);
+    }
+}
+
+static void ui_ManualControl_event_DisableSOLO(lv_event_t *e)
+{
+    if (lv_event_get_code(e) == LV_EVENT_CLICKED)
+    {
+        stateDisableSOLO = !stateDisableSOLO;
+        update_button_color(ui_DisableSOLOButton, stateDisableSOLO);
+        logState("Disable SOLO", stateDisableSOLO);
+
+        if (stateDisableSOLO)
+            event_DisableSOLOEnabled(e);
+        else
+            event_DisableSOLODisabled(e);
     }
 }
 
@@ -198,10 +274,10 @@ void ui_ManualControl_screen_init()
 
     // ---------- CREATE BUTTONS ----------
     // First two rows, 2 per row
-    ui_DisableSOLOButton = create_button(btnContainer, "Disable SOLO", ui_event_DisableSOLO);
-    ui_CoolCycleSOLOButton = create_button(btnContainer, "Cool SOLO", ui_event_CoolCycleSOLO);
-    ui_OperationButton = create_button(btnContainer, "Operation", ui_event_Operation);
-    ui_WallHeaterButton = create_button(btnContainer, "Wall Heater", ui_event_WallHeater);
+    ui_DisableSOLOButton = create_button(btnContainer, "Disable SOLO", ui_ManualControl_event_DisableSOLO);
+    ui_CoolCycleSOLOButton = create_button(btnContainer, "Cool SOLO", ui_ManualControl_event_CoolCycleSOLO);
+    ui_OperationButton = create_button(btnContainer, "Operation", ui_ManualControl_event_Operation);
+    ui_WallHeaterButton = create_button(btnContainer, "Wall Heater", ui_ManualControl_event_WallHeater);
 
     // Last button, full width
     ui_PumpButton = lv_button_create(btnContainer);
@@ -215,7 +291,7 @@ void ui_ManualControl_screen_init()
     lv_obj_set_style_text_font(lblPump, &lv_font_montserrat_24, LV_PART_MAIN);
     lv_obj_center(lblPump);
 
-    lv_obj_add_event_cb(ui_PumpButton, ui_event_Pump, LV_EVENT_ALL, nullptr);
+    lv_obj_add_event_cb(ui_PumpButton, ui_ManualControl_event_Pump, LV_EVENT_ALL, nullptr);
 
     // Load screen
     lv_scr_load(ui_ManualControlScreen);

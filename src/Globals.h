@@ -33,6 +33,7 @@ extern WiFiClientWrapper *wifiClient;
 extern MenuManager menuManager;
 extern PasteurizerRelays pasteurizerRelays;
 extern TemperatureSensor chamberTemperatureSensor;
+extern TemperatureSensor probeTemperatureSensor;
 
 namespace PasteurizerMenu
 {

@@ -85,7 +85,7 @@ void ui_WiFiConnect_screen_init(void)
 
     // Logo
     lv_obj_t *ui_BSLogo = lv_image_create(ui_WiFiConnectScreen);
-    lv_image_set_src(ui_BSLogo, &ui_img_buildshift_brand_png);
+   // lv_image_set_src(ui_BSLogo, &ui_img_buildshift_brand_png);
     lv_obj_set_align(ui_BSLogo, LV_ALIGN_CENTER);
     lv_obj_set_y(ui_BSLogo, -157);
 

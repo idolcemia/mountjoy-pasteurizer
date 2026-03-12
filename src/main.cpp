@@ -90,7 +90,7 @@ void loop()
 
         logger.info("[MAIN] Chamber temp: " + String(chamberTemp));
         // Update the UI
-        ui_ManualControl_screen_update(coreTemp, chamberTemp);
+      //  ui_ManualControl_screen_update(coreTemp, chamberTemp);
     }
 
     delay(5); // Small delay for stability

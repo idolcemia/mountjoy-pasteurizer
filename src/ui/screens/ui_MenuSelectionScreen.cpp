@@ -91,7 +91,7 @@ void ui_MenuSelection_screen_init()
 
     // --- Optional Logo (top-left) ---
     ui_MenuLogo = lv_image_create(ui_MenuSelectionScreen);
-    lv_image_set_src(ui_MenuLogo, &ui_img_buildshift_brand_png);
+    //lv_image_set_src(ui_MenuLogo, &ui_img_buildshift_brand_png);
     lv_obj_set_size(ui_MenuLogo, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
     lv_obj_align(ui_MenuLogo, LV_ALIGN_TOP_MID, 0, 10);
 

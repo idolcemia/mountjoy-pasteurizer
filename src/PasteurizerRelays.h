@@ -9,7 +9,9 @@ public:
         int coolCycleSOLO,
         int operation,
         int wallHeater,
-        int pump);
+        int pump,
+        int chiller);
+
 
     void begin();
 
@@ -33,12 +35,17 @@ public:
     void activatePumpRelay();
     void deactivatePumpRelay();
 
+    // Chiller relay
+    void activateChillerRelay();
+    void deactivateChillerRelay();
+
 private:
     int _disableSOLO;
     int _coolCycleSOLO;
     int _operation;
     int _wallHeater;
     int _pump;
+    int _chiller;
 
     // Internal helper
     void setRelay(int pin, bool state);
