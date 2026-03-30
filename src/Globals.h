@@ -8,7 +8,7 @@
 #include "lvgl.h"
 #include "config.h"
 #include "PasteurizerRelays.h"
-#include "TemperatureSensor.h"
+#include "TemperatureSensorPT.h"
 
 // -- Menus --
 #include <MenuManager.h>
@@ -32,8 +32,9 @@ extern NetworkManager *network;
 extern WiFiClientWrapper *wifiClient;
 extern MenuManager menuManager;
 extern PasteurizerRelays pasteurizerRelays;
-extern TemperatureSensor chamberTemperatureSensor;
-extern TemperatureSensor probeTemperatureSensor;
+extern TemperatureSensorPT probeTemperatureSensor    ;
+extern TemperatureSensorPT floodTemperatureSensor   ;
+
 
 namespace PasteurizerMenu
 {

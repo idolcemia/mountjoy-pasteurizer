@@ -79,18 +79,29 @@ void loop()
         lastTempUpdate = currentMillis;
 
         // Read temperatures from sensors
-        float coreTemp = 0.0; // Replace with actual core sensor if you have one
-        float chamberTemp = chamberTemperatureSensor.getTempC();
+        float probeTemp = probeTemperatureSensor.getTempC();
+        float floodTemp = floodTemperatureSensor.getTempC();
 
-        // Handle invalid readings
-        if (isnan(chamberTemp))
+        // At 72 degrees probe temp, turn off heater and pump, and 
+        // turn on the fresh water flood to begin cooling cycle.
+        if (probeTemp == 72)
         {
-            chamberTemp = -999.0; // Or handle however you prefer
+            lv_obj_clear_state(ui_switchPump, LV_STATE_CHECKED);
+            lv_obj_clear_state(ui_WallHeater, LV_STATE_CHECKED);
+            lv_obj_add_state(ui_CoolSOLO, LV_STATE_CHECKED);
         }
 
-        logger.info("[MAIN] Chamber temp: " + String(chamberTemp));
+        // If flood temperature exceeds 78 degrees, turn the wall heater off.
+        if (floodTemp > 78)
+        {
+            lv_obj_clear_state(ui_WallHeater, LV_STATE_CHECKED);
+        }
+
+        logger.info("[MAIN] Flood temp: " + String(floodTemp));
+        logger.info("[MAIN] Probe temp: " + String(probeTemp));
         // Update the UI
-      //  ui_ManualControl_screen_update(coreTemp, chamberTemp);
+        lv_label_set_text(ui_floodTemp, String(floodTemp).c_str());
+        lv_label_set_text(ui_probeTemp, String(probeTemp).c_str());
     }
 
     delay(5); // Small delay for stability

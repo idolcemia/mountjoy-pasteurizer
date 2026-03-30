@@ -38,7 +38,7 @@ extern lv_obj_t * ui_labelHeat;
 extern lv_obj_t * ui_labelRecirculate;
 extern lv_obj_t * ui_labelProbeTemp;
 extern lv_obj_t * ui_labelFloodTemp;
-extern lv_obj_t * ui_chamberTemp;
+extern lv_obj_t * ui_floodTemp;
 extern lv_obj_t * ui_probeTemp;
 // CUSTOM VARIABLES
 extern lv_obj_t * uic_PasteurizerChiller;
@@ -60,7 +60,7 @@ extern lv_obj_t * uic_labelHeat;
 extern lv_obj_t * uic_labelRecirculate;
 extern lv_obj_t * uic_labelProbeTemp;
 extern lv_obj_t * uic_labelFloodTemp;
-extern lv_obj_t * uic_chamberTemp;
+extern lv_obj_t * uic_floodTemp;
 extern lv_obj_t * uic_probeTemp;
 
 #ifdef __cplusplus

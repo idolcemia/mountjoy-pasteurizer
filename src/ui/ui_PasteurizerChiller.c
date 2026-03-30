@@ -6,7 +6,7 @@
 #include "ui.h"
 
 lv_obj_t * uic_probeTemp;
-lv_obj_t * uic_chamberTemp;
+lv_obj_t * uic_floodTemp;
 lv_obj_t * uic_labelFloodTemp;
 lv_obj_t * uic_labelProbeTemp;
 lv_obj_t * uic_labelRecirculate;
@@ -45,7 +45,7 @@ lv_obj_t * ui_labelHeat = NULL;
 lv_obj_t * ui_labelRecirculate = NULL;
 lv_obj_t * ui_labelProbeTemp = NULL;
 lv_obj_t * ui_labelFloodTemp = NULL;
-lv_obj_t * ui_chamberTemp = NULL;
+lv_obj_t * ui_floodTemp = NULL;
 lv_obj_t * ui_probeTemp = NULL;
 // event funtions
 void ui_event_DisableSOLO(lv_event_t * e)
@@ -132,6 +132,10 @@ void ui_PasteurizerChiller_screen_init(void)
 {
     ui_PasteurizerChiller = lv_obj_create(NULL);
     lv_obj_remove_flag(ui_PasteurizerChiller, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_pad_left(ui_PasteurizerChiller, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_PasteurizerChiller, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_PasteurizerChiller, 3, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_PasteurizerChiller, 3, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_DisableSOLO = lv_switch_create(ui_PasteurizerChiller);
     lv_obj_set_width(ui_DisableSOLO, 50);
@@ -139,6 +143,7 @@ void ui_PasteurizerChiller_screen_init(void)
     lv_obj_set_x(ui_DisableSOLO, -166);
     lv_obj_set_y(ui_DisableSOLO, -85);
     lv_obj_set_align(ui_DisableSOLO, LV_ALIGN_CENTER);
+    lv_obj_set_ext_click_area(ui_DisableSOLO, 20);
     ui_object_set_themeable_style_property(ui_DisableSOLO, LV_PART_MAIN | LV_STATE_DEFAULT, LV_STYLE_BG_COLOR,
                                            _ui_theme_color_Orange);
     ui_object_set_themeable_style_property(ui_DisableSOLO, LV_PART_MAIN | LV_STATE_DEFAULT, LV_STYLE_BG_OPA,
@@ -158,6 +163,7 @@ void ui_PasteurizerChiller_screen_init(void)
     lv_obj_set_x(ui_CoolSOLO, 36);
     lv_obj_set_y(ui_CoolSOLO, -80);
     lv_obj_set_align(ui_CoolSOLO, LV_ALIGN_CENTER);
+    lv_obj_set_ext_click_area(ui_CoolSOLO, 20);
     ui_object_set_themeable_style_property(ui_CoolSOLO, LV_PART_MAIN | LV_STATE_DEFAULT, LV_STYLE_BG_COLOR,
                                            _ui_theme_color_Orange);
     ui_object_set_themeable_style_property(ui_CoolSOLO, LV_PART_MAIN | LV_STATE_DEFAULT, LV_STYLE_BG_OPA,
@@ -288,8 +294,8 @@ void ui_PasteurizerChiller_screen_init(void)
     ui_labelProbeTemp = lv_label_create(ui_PasteurizerChiller);
     lv_obj_set_width(ui_labelProbeTemp, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_labelProbeTemp, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_labelProbeTemp, -173);
-    lv_obj_set_y(ui_labelProbeTemp, 138);
+    lv_obj_set_x(ui_labelProbeTemp, -174);
+    lv_obj_set_y(ui_labelProbeTemp, 124);
     lv_obj_set_align(ui_labelProbeTemp, LV_ALIGN_CENTER);
     lv_label_set_text(ui_labelProbeTemp, "Probe Temp");
     lv_obj_set_style_text_font(ui_labelProbeTemp, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -297,27 +303,50 @@ void ui_PasteurizerChiller_screen_init(void)
     ui_labelFloodTemp = lv_label_create(ui_PasteurizerChiller);
     lv_obj_set_width(ui_labelFloodTemp, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_labelFloodTemp, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_labelFloodTemp, 93);
-    lv_obj_set_y(ui_labelFloodTemp, 138);
+    lv_obj_set_x(ui_labelFloodTemp, 92);
+    lv_obj_set_y(ui_labelFloodTemp, 126);
     lv_obj_set_align(ui_labelFloodTemp, LV_ALIGN_CENTER);
     lv_label_set_text(ui_labelFloodTemp, "Flood Temp");
     lv_obj_set_style_text_font(ui_labelFloodTemp, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_chamberTemp = lv_label_create(ui_PasteurizerChiller);
-    lv_obj_set_width(ui_chamberTemp, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_chamberTemp, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_chamberTemp, 79);
-    lv_obj_set_y(ui_chamberTemp, 176);
-    lv_obj_set_align(ui_chamberTemp, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_chamberTemp, "Temp in C");
+    ui_floodTemp = lv_label_create(ui_PasteurizerChiller);
+    lv_obj_set_width(ui_floodTemp, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_floodTemp, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_floodTemp, 88);
+    lv_obj_set_y(ui_floodTemp, 170);
+    lv_obj_set_align(ui_floodTemp, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_floodTemp, "Temp in C");
+    lv_obj_set_style_text_color(ui_floodTemp, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_floodTemp, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(ui_floodTemp, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_object_set_themeable_style_property(ui_floodTemp, LV_PART_MAIN | LV_STATE_DEFAULT, LV_STYLE_BG_COLOR,
+                                           _ui_theme_color_Blue);
+    ui_object_set_themeable_style_property(ui_floodTemp, LV_PART_MAIN | LV_STATE_DEFAULT, LV_STYLE_BG_OPA,
+                                           _ui_theme_alpha_Blue);
+    lv_obj_set_style_pad_left(ui_floodTemp, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_floodTemp, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_floodTemp, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_floodTemp, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_probeTemp = lv_label_create(ui_PasteurizerChiller);
     lv_obj_set_width(ui_probeTemp, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_probeTemp, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_probeTemp, -176);
-    lv_obj_set_y(ui_probeTemp, 174);
+    lv_obj_set_y(ui_probeTemp, 167);
     lv_obj_set_align(ui_probeTemp, LV_ALIGN_CENTER);
     lv_label_set_text(ui_probeTemp, "Temp in C");
+    lv_obj_set_style_text_color(ui_probeTemp, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_probeTemp, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_align(ui_probeTemp, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(ui_probeTemp, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_object_set_themeable_style_property(ui_probeTemp, LV_PART_MAIN | LV_STATE_DEFAULT, LV_STYLE_BG_COLOR,
+                                           _ui_theme_color_Blue);
+    ui_object_set_themeable_style_property(ui_probeTemp, LV_PART_MAIN | LV_STATE_DEFAULT, LV_STYLE_BG_OPA,
+                                           _ui_theme_alpha_Blue);
+    lv_obj_set_style_pad_left(ui_probeTemp, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_probeTemp, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_probeTemp, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_probeTemp, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_DisableSOLO, ui_event_DisableSOLO, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_CoolSOLO, ui_event_CoolSOLO, LV_EVENT_ALL, NULL);
@@ -344,7 +373,7 @@ void ui_PasteurizerChiller_screen_init(void)
     uic_labelRecirculate = ui_labelRecirculate;
     uic_labelProbeTemp = ui_labelProbeTemp;
     uic_labelFloodTemp = ui_labelFloodTemp;
-    uic_chamberTemp = ui_chamberTemp;
+    uic_floodTemp = ui_floodTemp;
     uic_probeTemp = ui_probeTemp;
 
 }
@@ -392,8 +421,8 @@ void ui_PasteurizerChiller_screen_destroy(void)
     ui_labelProbeTemp = NULL;
     uic_labelFloodTemp = NULL;
     ui_labelFloodTemp = NULL;
-    uic_chamberTemp = NULL;
-    ui_chamberTemp = NULL;
+    uic_floodTemp = NULL;
+    ui_floodTemp = NULL;
     uic_probeTemp = NULL;
     ui_probeTemp = NULL;
 

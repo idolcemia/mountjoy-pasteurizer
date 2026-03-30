@@ -3,6 +3,3 @@
 // LVGL version: 9.3
 // Project name: Pasteurizer_Chiller
 
-#include "ui.h"
-
-
