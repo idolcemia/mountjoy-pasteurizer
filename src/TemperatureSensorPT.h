@@ -11,7 +11,12 @@ private:
 
     static constexpr float RNOMINAL = 100.0f; // PT100 nominal resistance
     static constexpr float RREF = 430.0f;     // MAX31865 reference resistor
-
+    static const int READING_AVG_WINDOW = 10; // Number of recent readings to average for smoothing
+    float _recentReading[READING_AVG_WINDOW] = {0.0f}; // Circular buffer to hold recent volume readings for smoothing
+    int _recentReadingIndex = 0;
+    int _recentReadingCount = 0;
+    float _recentReadingSum = 0.0f;
+    
 public:
     TemperatureSensorPT(int cs_pin, int sdi_pin, int sdo_pin, int sck_pin);
 
