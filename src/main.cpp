@@ -38,6 +38,17 @@ WiFiClientWrapper testClient;
 unsigned long lastTempUpdate = 0;
 const unsigned long TEMP_UPDATE_INTERVAL = 1000;
 
+enum Mode
+{
+    MODE_MANUAL = 0,
+    MODE_HEATING = 1,
+    MODE_COOLING = 2,
+    MODE_REPORT = 3,
+    MODE_SETTINGS = 4
+};
+
+int currentMode = MODE_MANUAL;
+
 void _log();
 
 void setup()
@@ -74,6 +85,7 @@ void loop()
 
     // Update temperature display periodically
     unsigned long currentMillis = millis();
+
     if (currentMillis - lastTempUpdate >= TEMP_UPDATE_INTERVAL)
     {
         lastTempUpdate = currentMillis;
@@ -82,23 +94,60 @@ void loop()
         float probeTemp = probeTemperatureSensor.getTempC();
         float floodTemp = floodTemperatureSensor.getTempC();
 
-        // At 72 degrees probe temp, turn off heater and pump, and 
-        // turn on the fresh water flood to begin cooling cycle.
-        if (probeTemp == 72)
+        switch (currentMode)
+
         {
-            lv_obj_clear_state(ui_switchPump, LV_STATE_CHECKED);
-            lv_obj_clear_state(ui_WallHeater, LV_STATE_CHECKED);
-            lv_obj_add_state(ui_CoolSOLO, LV_STATE_CHECKED);
+        default:
+        case MODE_MANUAL:
+            break;
+        case MODE_HEATING:
+
+            switch (heatControl._state)
+            {
+            default:
+            case HeatControlState::HC_RESET:
+                break;
+            case HeatControlState::HC_RUN:
+                break;
+            case HeatControlState::HC_PAUSE:
+                heatControl.stop();
+                break;
+            case HeatControlState::HC_DONE:
+                heatControl.reset();
+                currentMode = MODE_COOLING; // Transition to cooling after heating is done
+                break;
+            }
+
+            heatControl.updateUI(); // Update heat control UI elements based on current temp and state
+
+        case MODE_COOLING:
+
+            switch (chillControl._state)
+            {
+            default:
+
+            case ChillControlState::CC_RESET:
+
+                break;
+
+            case ChillControlState::CC_RUN:
+
+                break;
+
+            case ChillControlState::CC_PAUSE:
+                chillControl.stop();
+                break;
+
+            case ChillControlState::CC_DONE:
+                chillControl.reset();
+                currentMode = MODE_REPORT; // Transition to report mode after cooling is done
+
+                break;
+            }
+
+            chillControl.updateUI();
         }
 
-        // If flood temperature exceeds 78 degrees, turn the wall heater off.
-        if (floodTemp > 78)
-        {
-            lv_obj_clear_state(ui_WallHeater, LV_STATE_CHECKED);
-        }
-
-        logger.info("[MAIN] Flood temp: " + String(floodTemp));
-        logger.info("[MAIN] Probe temp: " + String(probeTemp));
         // Update the UI
         lv_label_set_text(ui_floodTemp, String(floodTemp).c_str());
         lv_label_set_text(ui_probeTemp, String(probeTemp).c_str());

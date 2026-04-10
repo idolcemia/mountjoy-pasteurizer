@@ -9,6 +9,8 @@
 #include "config.h"
 #include "PasteurizerRelays.h"
 #include "TemperatureSensorPT.h"
+#include "HeatControl.h"
+#include "ChillControl.h"
 
 // -- Menus --
 #include <MenuManager.h>
@@ -32,9 +34,10 @@ extern NetworkManager *network;
 extern WiFiClientWrapper *wifiClient;
 extern MenuManager menuManager;
 extern PasteurizerRelays pasteurizerRelays;
-extern TemperatureSensorPT probeTemperatureSensor    ;
-extern TemperatureSensorPT floodTemperatureSensor   ;
-
+extern TemperatureSensorPT probeTemperatureSensor;
+extern TemperatureSensorPT floodTemperatureSensor;
+extern HeatControl heatControl;
+extern ChillControl chillControl;
 
 namespace PasteurizerMenu
 {

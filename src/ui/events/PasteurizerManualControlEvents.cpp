@@ -39,13 +39,13 @@ extern "C"
     void ui_event_CoolCycleSOLOEnabled(lv_event_t *e)
     {
         logButtonState("Cool Cycle SOLO", true);
-        pasteurizerRelays.activateCoolCycleSOLO();
+        pasteurizerRelays.activateFreshWaterRelay();
     }
 
     void ui_event_CoolCycleSOLODisabled(lv_event_t *e)
     {
         logButtonState("Cool Cycle SOLO", false);
-        pasteurizerRelays.deactivateCoolCycleSOLO();
+        pasteurizerRelays.deactivateFreshWaterRelay();
     }
 
     /* ============================================================
@@ -54,13 +54,13 @@ extern "C"
     void ui_event_OperationButtonEnabled(lv_event_t *e)
     {
         logButtonState("Operation", true);
-        pasteurizerRelays.activateOperationRelay();
+        pasteurizerRelays.activateFloodPumpRelay();
     }
 
     void ui_event_OperationButtonDisabled(lv_event_t *e)
     {
         logButtonState("Operation", false);
-        pasteurizerRelays.deactivateOperationRelay();
+        pasteurizerRelays.deactivateFloodPumpRelay();
     }
 
     /* ============================================================
@@ -84,13 +84,13 @@ extern "C"
     void ui_event_PumpButtonEnabled(lv_event_t *e)
     {
         logButtonState("Pump", true);
-        pasteurizerRelays.activatePumpRelay();
+        pasteurizerRelays.activateRecirculationPumpRelay();
     }
 
     void ui_event_PumpButtonDisabled(lv_event_t *e)
     {
         logButtonState("Pump", false);
-        pasteurizerRelays.deactivatePumpRelay();
+        pasteurizerRelays.deactivateRecirculationPumpRelay();
     }
 
     /* ============================================================
@@ -106,6 +106,21 @@ extern "C"
     {
         logButtonState("Chiller", false);
         pasteurizerRelays.deactivateChillerRelay();
+    }
+
+        /* ============================================================
+       Cycle Button Events
+       ============================================================ */  
+    void ui_event_CycleButtonEnabled(lv_event_t *e)
+    {
+        logButtonState("Cycle", true);
+        pasteurizerRelays.CycleButtonEnabled();
+    }   
+
+    void ui_event_CycleButtonDisabled(lv_event_t *e)
+    {
+        logButtonState("Cycle", false);
+        pasteurizerRelays.CycleButtonDisabled();
     }
 
     /* ============================================================

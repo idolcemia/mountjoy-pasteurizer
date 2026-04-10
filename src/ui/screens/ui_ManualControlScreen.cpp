@@ -24,6 +24,7 @@ bool stateCoolCycleSOLO = false;
 bool stateOperation = false;
 bool stateWallHeater = false;
 bool statePump = false;
+bool stateCycle = false;
 
 static void logState(const char *name, bool state)
 {
@@ -39,14 +40,12 @@ static void update_button_color(lv_obj_t *btn, bool state)
 
 void event_DisableSOLOEnabled(lv_event_t *e)
 {
-  if (lv_event_get_code(e) == LV_EVENT_CLICKED)
+    if (lv_event_get_code(e) == LV_EVENT_CLICKED)
     {
 
-      //  logState("Disable SOLO");
-
+        //  logState("Disable SOLO");
 
         ui_event_OperationButtonEnabled(e);
-
     }
 }
 
@@ -55,31 +54,28 @@ void event_DisableSOLODisabled(lv_event_t *e)
     {
 
         ui_event_OperationButtonDisabled(e);
-
     }
 }
 
 void event_CoolCycleSOLOEnabled(lv_event_t *e)
 {
 
-  ui_event_CoolCycleSOLOEnabled(e);
-
+    ui_event_CoolCycleSOLOEnabled(e);
 }
 
 void event_CoolCycleSOLODisabled(lv_event_t *e)
 {
-  ui_event_CoolCycleSOLODisabled(e);
-  
+    ui_event_CoolCycleSOLODisabled(e);
 }
 
 void event_OperationButtonEnabled(lv_event_t *e)
 {
-  ui_event_OperationButtonEnabled(e);
+    ui_event_OperationButtonEnabled(e);
 }
 
 void event_OperationButtonDisabled(lv_event_t *e)
 {
-  ui_event_OperationButtonDisabled(e);
+    ui_event_OperationButtonDisabled(e);
 }
 
 void event_WallHeaterEnabled(lv_event_t *e)
@@ -92,7 +88,6 @@ void event_WallHeaterDisabled(lv_event_t *e)
     ui_event_WallHeaterDisabled(e);
 }
 
-
 void event_PumpButtonEnabled(lv_event_t *e)
 {
     ui_event_PumpButtonEnabled(e);
@@ -103,7 +98,6 @@ void event_PumpButtonDisabled(lv_event_t *e)
     ui_event_PumpButtonDisabled(e);
 }
 
-
 void event_ChillerButtonEnabled(lv_event_t *e)
 {
     ui_event_ChillerButtonEnabled(e);
@@ -112,6 +106,16 @@ void event_ChillerButtonEnabled(lv_event_t *e)
 void event_ChillerButtonDisabled(lv_event_t *e)
 {
     ui_event_ChillerButtonDisabled(e);
+}
+
+void event_CycleButtonEnabled(lv_event_t *e)
+{
+    ui_event_CycleButtonEnabled(e);
+}
+
+void event_CycleButtonDisabled(lv_event_t *e)
+{
+    ui_event_CycleButtonDisabled(e);
 }
 
 /* ============================================================
@@ -193,6 +197,20 @@ static void ui_ManualControl_event_DisableSOLO(lv_event_t *e)
     }
 }
 
+static void ui_ManualControl_event_Cycle(lv_event_t *e)
+{
+    if (lv_event_get_code(e) == LV_EVENT_CLICKED)
+    {
+        stateCycle = !stateCycle;
+        update_button_color(ui_switchCycle, stateCycle);
+        logState("Cycle", stateCycle);
+
+        if (stateCycle)
+            event_CycleButtonEnabled(e);
+        else
+            event_CycleButtonDisabled(e);
+    }
+}
 /* ============================================================
    SCREEN INIT
    ============================================================ */

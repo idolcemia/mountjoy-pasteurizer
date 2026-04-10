@@ -30,6 +30,7 @@ void ui_ManualControl_event_CoolCycleSOLO(lv_event_t *e);
 void ui_ManualControl_event_Operation(lv_event_t *e);
 void ui_ManualControl_event_WallHeater(lv_event_t *e);
 void ui_ManualControl_event_Pump(lv_event_t *e);
+void ui_ManualControl_event_Cycle(lv_event_t *e);
 
 void event_DisableSOLOEnabled(lv_event_t *e);
 void event_DisableSOLODisabled(lv_event_t *e);
@@ -43,6 +44,8 @@ void event_PumpButtonEnabled(lv_event_t *e);
 void event_PumpButtonDisabled(lv_event_t *e);
 void event_ChillerButtonEnabled(lv_event_t *e);
 void event_ChillerButtonDisabled(lv_event_t *e);
+void event_CycleButtonEnabled(lv_event_t *e);
+void event_CycleButtonDisabled(lv_event_t *e);
 
 // Screen lifecycle functions
 void ui_ManualControl_screen_init();

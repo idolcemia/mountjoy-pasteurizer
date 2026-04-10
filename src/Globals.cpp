@@ -22,6 +22,8 @@ PasteurizerRelays pasteurizerRelays(2, 3, 4, 5, 6, 7); // on the arduino shield,
 
 TemperatureSensorPT probeTemperatureSensor(9, 11, 12, 13);
 TemperatureSensorPT floodTemperatureSensor(10, 11, 12, 13);
+HeatControl heatControl(pasteurizerRelays, 72, 1);
+ChillControl chillControl(pasteurizerRelays, 10, 20);
 
 // Global labels
 GlobalLabels gLabels;
@@ -33,8 +35,11 @@ void initGlobals()
     initUsers();
 
     pasteurizerRelays.begin();
+    pasteurizerRelays.attachControllers(&heatControl, &chillControl);
     floodTemperatureSensor.begin();
     probeTemperatureSensor.begin();
+    heatControl.begin();
+    chillControl.begin();
 }
 
 void initMenus()

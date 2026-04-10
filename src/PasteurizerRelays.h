@@ -1,17 +1,20 @@
 #pragma once
 #include <Arduino.h>
 
+// Forward declarations to break circular dependency
+class HeatControl;
+class ChillControl;
+
 class PasteurizerRelays
 {
 public:
     PasteurizerRelays(
         int disableSOLO,
-        int coolCycleSOLO,
-        int operation,
+        int freshWater,
+        int floodPump,
         int wallHeater,
-        int pump,
+        int recirculationPump,
         int chiller);
-
 
     void begin();
 
@@ -19,34 +22,43 @@ public:
     void activateDisableSOLO();
     void deactivateDisableSOLO();
 
-    // Cool Cycle SOLO relay
-    void activateCoolCycleSOLO();
-    void deactivateCoolCycleSOLO();
+    // Fresh Water relay
+    void activateFreshWaterRelay();
+    void deactivateFreshWaterRelay();
 
-    // Operation relay
-    void activateOperationRelay();
-    void deactivateOperationRelay();
+    // Flood relay
+    void activateFloodPumpRelay();
+    void deactivateFloodPumpRelay();
 
     // Wall Heater relay
     void activateWallHeaterRelay();
     void deactivateWallHeaterRelay();
 
-    // Pump relay
-    void activatePumpRelay();
-    void deactivatePumpRelay();
+    // Recirculation Pump relay
+    void activateRecirculationPumpRelay();
+    void deactivateRecirculationPumpRelay();
 
     // Chiller relay
     void activateChillerRelay();
     void deactivateChillerRelay();
 
+    // Cycle switch events
+    void CycleButtonEnabled();
+    void CycleButtonDisabled();
+
+    // Inject controller dependencies after construction.
+    void attachControllers(HeatControl *heatControl, ChillControl *chillControl);
+
 private:
     int _disableSOLO;
-    int _coolCycleSOLO;
-    int _operation;
+    int _freshWater;
+    int _floodPump;
     int _wallHeater;
-    int _pump;
+    int _recirculationPump;
     int _chiller;
+    int _cycle;
+    HeatControl *_heatControl;
+    ChillControl *_chillControl;
 
-    // Internal helper
     void setRelay(int pin, bool state);
 };

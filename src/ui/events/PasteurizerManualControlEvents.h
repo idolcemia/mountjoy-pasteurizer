@@ -36,6 +36,10 @@ extern "C"
     void ui_event_ChillerButtonEnabled(lv_event_t *e);
     void ui_event_ChillerButtonDisabled(lv_event_t *e);
 
+        // --- Cycle Button Events ---
+    void ui_event_CycleButtonEnabled(lv_event_t *e);
+    void ui_event_CycleButtonDisabled(lv_event_t *e);
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
