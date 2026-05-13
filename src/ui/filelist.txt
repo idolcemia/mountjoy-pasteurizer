@@ -9,4 +9,3 @@ ui_helpers.c
 ui_events.c
 ui_img_418309003.c
 ui_img_1324469499.c
-ui_img_chilling_png.c

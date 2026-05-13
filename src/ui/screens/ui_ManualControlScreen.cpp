@@ -197,20 +197,6 @@ static void ui_ManualControl_event_DisableSOLO(lv_event_t *e)
     }
 }
 
-static void ui_ManualControl_event_Cycle(lv_event_t *e)
-{
-    if (lv_event_get_code(e) == LV_EVENT_CLICKED)
-    {
-        stateCycle = !stateCycle;
-        update_button_color(ui_switchCycle, stateCycle);
-        logState("Cycle", stateCycle);
-
-        if (stateCycle)
-            event_CycleButtonEnabled(e);
-        else
-            event_CycleButtonDisabled(e);
-    }
-}
 /* ============================================================
    SCREEN INIT
    ============================================================ */

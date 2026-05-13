@@ -4,8 +4,10 @@
 
 #ifdef __cplusplus
 extern "C"
+
 {
 #endif
+
 
     // --- Disable SOLO Button Events ---
     void ui_event_DisableSOLOEnabled(lv_event_t *e);
@@ -43,3 +45,16 @@ extern "C"
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
+
+extern int currentMode;
+extern bool autoCycleEnabled; // If true, will automatically transition from heating to cooling mode when heat control is done
+
+
+enum Mode
+{
+    MODE_MANUAL = 0,
+    MODE_HEATING = 1,
+    MODE_COOLING = 2,
+    MODE_REPORT = 3,
+    MODE_SETTINGS = 4
+};

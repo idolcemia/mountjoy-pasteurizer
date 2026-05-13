@@ -6,7 +6,7 @@
 
 class PasteurizerRelays;
 
-extern TemperatureSensorPT probeTemperatureSensor;
+extern TemperatureSensorPT probeTemperatureSensor, floodTemperatureSensor;
 
 enum HeatControlState
 {
@@ -33,8 +33,10 @@ private:
     float _startingTemp;
     float _holdTimeMinutes;
     unsigned long _pauseStartTime;
-    const float _tempAllowedDeviation = 1.0; // Maximum deviation from baseline allowed.
-    // TemperatureSensorDallas tempSensor; // Dallas temperature sensor instance
+    const float _tempAllowedDeviation = 5.0; // In the latter stage of heating, if the flood temperature exceeds the probe 
+                                                // temperature by more than this amount, pause heating to prevent boiling.
+    
+
 
 public:
     /**
@@ -73,12 +75,17 @@ public:
      */
     float getTempC();
 
+    void processControl();
+
     /**
      * Update display elements based on current temperature and state. Returns current temperature for convenience.
      */
     float updateUI();
 
     void pause();
+   
+
+    void resume();
 };
 
 #endif

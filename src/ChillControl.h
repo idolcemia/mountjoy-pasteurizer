@@ -6,7 +6,8 @@
 
 class PasteurizerRelays;
 
-extern TemperatureSensorPT probeTemperatureSensor;
+extern TemperatureSensorPT probeTemperatureSensor, floodTemperatureSensor;
+
 enum ChillControlState
 {
     CC_RESET = 0,
@@ -69,6 +70,8 @@ public:
      * Take temperature reading and update state
      */
     float getTempC();
+
+    void processControl();
 
     /**
      * Update display elements based on current temperature and state. Returns current temperature for convenience.

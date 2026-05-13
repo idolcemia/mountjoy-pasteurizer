@@ -17,14 +17,13 @@ ChillControl::ChillControl(
 void ChillControl::begin()
 {
 
-    _state = ChillControlState::CC_DONE;
+    _state = ChillControlState::CC_RESET;
     _temp = NAN;
     _startingTemp = NAN;
 }
 
 void ChillControl::start()
 {
-    _relays.deactivateChillerRelay(); // Ensure chiller is off before starting flood and recirculation to prevent cold shock
     _relays.activateFreshWaterRelay();
     _relays.activateFloodPumpRelay();
     _startingTemp = getTempC(); // Capture starting temperature for deviation checks
@@ -32,6 +31,8 @@ void ChillControl::start()
     // Update UI to reflect new state
     lv_obj_add_state(ui_switchOperation, LV_STATE_CHECKED);
     lv_obj_add_state(ui_CoolSOLO, LV_STATE_CHECKED);
+    lv_bar_set_value(ui_setPointBar, int(_tempSetPoint), LV_ANIM_OFF);
+    lv_label_set_text(ui_setPointTemp, String(_tempSetPoint).c_str());
 }
 void ChillControl::stop()
 {
@@ -45,18 +46,29 @@ void ChillControl::stop()
     lv_obj_clear_state(ui_CoolSOLO, LV_STATE_CHECKED);
     lv_obj_clear_state(ui_ChillerButton, LV_STATE_CHECKED);
     lv_obj_clear_state(ui_switchPump, LV_STATE_CHECKED);
-    _state = ChillControlState::CC_DONE;
+    lv_bar_set_value(ui_setPointBar, 0, LV_ANIM_OFF);
+
 }
 void ChillControl::reset()
 {
     stop();
+    _state = ChillControlState::CC_RESET;
     updateUI(); // Update UI to reflect reset state
 }
 float ChillControl::getTempC()
 {
     _temp = probeTemperatureSensor.getTempC();
 
-    if (_temp <= _glycolChillSetPoint) // If glycol chill set point reached or exceeded, activate chiller
+    return _temp;
+}
+
+void ChillControl::processControl()
+{
+
+    _temp = getTempC();
+
+    // If time to switch to glycol chilling, activate chiller relay and update UI accordingly
+    if (_temp <= _glycolChillSetPoint)
     {
         _relays.activateChillerRelay();
         _relays.activateRecirculationPumpRelay();
@@ -65,15 +77,17 @@ float ChillControl::getTempC()
         lv_obj_add_state(ui_switchPump, LV_STATE_CHECKED);
         lv_obj_clear_state(ui_CoolSOLO, LV_STATE_CHECKED);
     }
-    // If set point reached or exceeded, transition to DONE state
-    if (_temp <= _tempSetPoint)
+
+        // If set point reached or exceeded, transition to DONE state
+    if (_temp <= _tempSetPoint )
     {
-        reset();
+        stop();
+         _state = ChillControlState::CC_DONE;
+
     }
+   
 
-    return _temp;
 }
-
 float ChillControl::updateUI()
 {
 

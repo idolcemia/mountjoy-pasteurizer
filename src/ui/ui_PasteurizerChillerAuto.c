@@ -46,8 +46,6 @@ void ui_PasteurizerChillerAuto_screen_init(void)
     lv_obj_add_flag(ui_Chart1, LV_OBJ_FLAG_OVERFLOW_VISIBLE);      //make scales visible - Should it be forced to True?
     //lv_obj_remove_flag( ui_Chart1, LV_OBJ_FLAG_SCROLLABLE );    //no chart-zoom in LVGL9 - Shouldn't it be forced to False?
     lv_chart_set_type(ui_Chart1, LV_CHART_TYPE_LINE);
-    lv_obj_set_style_bg_image_src(ui_Chart1, &ui_img_chilling_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     ui_Chart1_Xaxis = lv_scale_create(ui_Chart1);
     lv_scale_set_mode(ui_Chart1_Xaxis, LV_SCALE_MODE_HORIZONTAL_BOTTOM);
     lv_obj_set_size(ui_Chart1_Xaxis, lv_pct(100), 50);

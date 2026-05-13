@@ -38,6 +38,7 @@ WiFiClientWrapper testClient;
 unsigned long lastTempUpdate = 0;
 const unsigned long TEMP_UPDATE_INTERVAL = 1000;
 
+
 enum Mode
 {
     MODE_MANUAL = 0,
@@ -48,6 +49,7 @@ enum Mode
 };
 
 int currentMode = MODE_MANUAL;
+bool autoCycleEnabled = true; // If true, will automatically transition from heating to cooling mode when heat control is done 
 
 void _log();
 
@@ -99,8 +101,13 @@ void loop()
         {
         default:
         case MODE_MANUAL:
-            break;
+            break; // Do nothing, allow user to control manually via UI
+
         case MODE_HEATING:
+
+            logger.info("[HeatControlState] " + String(heatControl._state));
+
+            heatControl.processControl(); // Let the heat control logic determine if we need to pause or stop heating based on current temp and state
 
             switch (heatControl._state)
             {
@@ -110,17 +117,24 @@ void loop()
             case HeatControlState::HC_RUN:
                 break;
             case HeatControlState::HC_PAUSE:
-                heatControl.stop();
                 break;
             case HeatControlState::HC_DONE:
                 heatControl.reset();
-                currentMode = MODE_COOLING; // Transition to cooling after heating is done
+                if (autoCycleEnabled && chillControl._state == ChillControlState::CC_RESET) // If auto cycle is enabled and we're not already cooling, transition to cooling mode
+                {
+                    currentMode = MODE_COOLING;
+                    chillControl.start();
+                }
                 break;
             }
 
             heatControl.updateUI(); // Update heat control UI elements based on current temp and state
-
+            break;
         case MODE_COOLING:
+
+        logger.info("[ChillControlState] " + String(chillControl._state));
+
+            chillControl.processControl(); // Let the chill control logic determine if we need to switch to glycol chilling or pause based on current temp and state
 
             switch (chillControl._state)
             {
@@ -135,22 +149,24 @@ void loop()
                 break;
 
             case ChillControlState::CC_PAUSE:
-                chillControl.stop();
                 break;
 
             case ChillControlState::CC_DONE:
                 chillControl.reset();
-                currentMode = MODE_REPORT; // Transition to report mode after cooling is done
 
                 break;
             }
 
             chillControl.updateUI();
+
+            break;
         }
 
         // Update the UI
         lv_label_set_text(ui_floodTemp, String(floodTemp).c_str());
         lv_label_set_text(ui_probeTemp, String(probeTemp).c_str());
+        lv_bar_set_value(ui_floodTempBar, int(floodTemp), LV_ANIM_OFF);
+        lv_bar_set_value(ui_probeTempBar, int(probeTemp), LV_ANIM_OFF);
     }
 
     delay(5); // Small delay for stability

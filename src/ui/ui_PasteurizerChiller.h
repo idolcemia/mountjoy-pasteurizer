@@ -34,10 +34,27 @@ extern lv_obj_t * ui_labelProbeTemp;
 extern lv_obj_t * ui_labelFloodTemp;
 extern lv_obj_t * ui_floodTemp;
 extern lv_obj_t * ui_probeTemp;
-extern void ui_event_switchCycle(lv_event_t * e);
-extern lv_obj_t * ui_switchCycle;
-extern lv_obj_t * ui_labelCycle;
 extern lv_obj_t * ui_Image2;
+extern lv_obj_t * ui_labelMode;
+extern lv_obj_t * ui_probeTempBar;
+extern lv_obj_t * ui_floodTempBar;
+extern lv_obj_t * ui_setPointBar;
+extern lv_obj_t * ui_labelProbeTemp1;
+extern void ui_event_StopButton(lv_event_t * e);
+extern lv_obj_t * ui_StopButton;
+extern lv_obj_t * ui_Label6;
+extern void ui_event_PasteurizeButton(lv_event_t * e);
+extern lv_obj_t * ui_PasteurizeButton;
+extern lv_obj_t * ui_Label9;
+extern lv_obj_t * ui_setPointTemp;
+extern void ui_event_heatButton(lv_event_t * e);
+extern lv_obj_t * ui_heatButton;
+extern lv_obj_t * ui_Label10;
+extern void ui_event_coolButton(lv_event_t * e);
+extern lv_obj_t * ui_coolButton;
+extern lv_obj_t * ui_Label11;
+extern void ui_event_switchAuto(lv_event_t * e);
+extern lv_obj_t * ui_switchAuto;
 // CUSTOM VARIABLES
 extern lv_obj_t * uic_PasteurizerChiller;
 extern lv_obj_t * uic_CoolSOLO;
@@ -54,8 +71,15 @@ extern lv_obj_t * uic_labelProbeTemp;
 extern lv_obj_t * uic_labelFloodTemp;
 extern lv_obj_t * uic_floodTemp;
 extern lv_obj_t * uic_probeTemp;
-extern lv_obj_t * uic_switchCycle;
-extern lv_obj_t * uic_labelCycle;
+extern lv_obj_t * uic_probeTempBar;
+extern lv_obj_t * uic_floodTempBar;
+extern lv_obj_t * uic_setPointBar;
+extern lv_obj_t * uic_StopButton;
+extern lv_obj_t * uic_PasteurizeButton;
+extern lv_obj_t * uic_setPointTemp;
+extern lv_obj_t * uic_heatButton;
+extern lv_obj_t * uic_coolButton;
+extern lv_obj_t * uic_switchAuto;
 
 #ifdef __cplusplus
 } /*extern "C"*/

@@ -17,6 +17,15 @@ void TemperatureSensorPT::begin()
 
 float TemperatureSensorPT::getTempC()
 {
+    uint8_t fault = thermo.readFault();
+    if (fault & MAX31865_FAULT_RTDINLOW)  // Check for RTD input low fault
+    {
+        thermo.clearFault();
+        return NAN; // Return NAN to indicate invalid reading
+    }
+
+    thermo.clearFault();
+
     float tempC = thermo.temperature(RNOMINAL, RREF);
 
     // Update the circular buffer for smoothing

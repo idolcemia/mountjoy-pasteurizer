@@ -20,8 +20,12 @@ void event_PumpButtonEnabled(lv_event_t * e);
 void event_PumpButtonDisabled(lv_event_t * e);
 void event_ChillerButtonEnabled(lv_event_t * e);
 void event_ChillerButtonDisabled(lv_event_t * e);
-void event_CycleButtonEnabled(lv_event_t * e);
-void event_CycleButtonDisabled(lv_event_t * e);
+void event_StopButtonPressed(lv_event_t * e);
+void event_PasteurizeButtonPressed(lv_event_t * e);
+void event_HeatnHoldPressed(lv_event_t * e);
+void event_CoolnChillPressed(lv_event_t * e);
+void event_AutoButtonEnabled(lv_event_t * e);
+void event_AutoButtonDisabled(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

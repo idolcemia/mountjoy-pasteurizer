@@ -8,7 +8,6 @@ SET(SOURCES ui_PasteurizerChiller.c
     ui_helpers.c
     ui_events.c
     ui_img_418309003.c
-    ui_img_1324469499.c
-    ui_img_chilling_png.c)
+    ui_img_1324469499.c)
 
 add_library(ui ${SOURCES})

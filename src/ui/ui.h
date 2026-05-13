@@ -43,7 +43,6 @@ extern lv_obj_t * ui____initial_actions0;
 // IMAGES AND IMAGE SETS
 LV_IMG_DECLARE(ui_img_418309003);    // assets/Puppy-Hoisting.png
 LV_IMG_DECLARE(ui_img_1324469499);    // assets/Face-Plate.png
-LV_IMG_DECLARE(ui_img_chilling_png);    // assets/Chilling.png
 
 // UI INIT
 void ui_init(void);
