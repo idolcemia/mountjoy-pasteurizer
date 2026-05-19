@@ -11,6 +11,7 @@
 #include "TemperatureSensorPT.h"
 #include "HeatControl.h"
 #include "ChillControl.h"
+#include "AudioSlave.h"
 
 // -- Menus --
 #include <MenuManager.h>

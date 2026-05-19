@@ -3,10 +3,12 @@
 
 #include <Arduino.h>
 #include "TemperatureSensorPT.h"
+#include "AudioSlave.h"
 
 class PasteurizerRelays;
 
 extern TemperatureSensorPT probeTemperatureSensor, floodTemperatureSensor;
+extern AudioSlave audioSlave;
 
 enum HeatControlState
 {
@@ -33,10 +35,8 @@ private:
     float _startingTemp;
     float _holdTimeMinutes;
     unsigned long _pauseStartTime;
-    const float _tempAllowedDeviation = 5.0; // In the latter stage of heating, if the flood temperature exceeds the probe 
-                                                // temperature by more than this amount, pause heating to prevent boiling.
-    
-
+    const float _tempAllowedDeviation = 5.0; // In the latter stage of heating, if the flood temperature exceeds the probe
+                                             // temperature by more than this amount, pause heating to prevent boiling.
 
 public:
     /**
@@ -83,7 +83,6 @@ public:
     float updateUI();
 
     void pause();
-   
 
     void resume();
 };
