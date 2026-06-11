@@ -3,13 +3,13 @@
 #include "ChillControl.h"
 
 PasteurizerRelays::PasteurizerRelays(
-    int disableSOLO,
+    int chillerB,
     int freshWater,
     int floodPump,
     int wallHeater,
     int recirculationPump,
     int chiller)
-    : _disableSOLO(disableSOLO),
+    : _chillerB(chillerB),
       _freshWater(freshWater),
       _floodPump(floodPump),
       _wallHeater(wallHeater),
@@ -29,14 +29,15 @@ void PasteurizerRelays::attachControllers(HeatControl *heatControl, ChillControl
 
 void PasteurizerRelays::begin()
 {
-    pinMode(_disableSOLO, OUTPUT);
+    pinMode(_chillerB, OUTPUT);
     pinMode(_freshWater, OUTPUT);
     pinMode(_floodPump, OUTPUT);
     pinMode(_wallHeater, OUTPUT);
     pinMode(_recirculationPump, OUTPUT);
     pinMode(_chiller, OUTPUT);
+
     // Set all relays to OFF at startup
-    deactivateDisableSOLO();
+    deactivateChillerB();
     deactivateFreshWaterRelay();
     deactivateFloodPumpRelay();
     deactivateWallHeaterRelay();
@@ -46,13 +47,13 @@ void PasteurizerRelays::begin()
 
 void PasteurizerRelays::setRelay(int pin, bool state)
 {
-    // HIGH = ON for most relay shields; adjust if your board is active LOW
-    digitalWrite(pin, state ? HIGH : LOW);
+    // HIGH = OFF  LOW = ON for the chosen relay, so we invert the state when writing to the pin
+    digitalWrite(pin, state ? LOW : HIGH);
 }
 
 // ---------------- Disable SOLO ----------------
-void PasteurizerRelays::activateDisableSOLO() { setRelay(_disableSOLO, true); }
-void PasteurizerRelays::deactivateDisableSOLO() { setRelay(_disableSOLO, false); }
+void PasteurizerRelays::activateChillerB() { setRelay(_chillerB, true); }
+void PasteurizerRelays::deactivateChillerB() { setRelay(_chillerB, false); }
 
 // ---------------- Fresh Water  ----------------
 void PasteurizerRelays::activateFreshWaterRelay() { setRelay(_freshWater, true); }
@@ -74,11 +75,11 @@ void PasteurizerRelays::deactivateRecirculationPumpRelay() { setRelay(_recircula
 void PasteurizerRelays::activateChillerRelay()
 {
     setRelay(_chiller, true);
-    setRelay(_disableSOLO, true);
+    setRelay(_chillerB, true);
 }
 void PasteurizerRelays::deactivateChillerRelay()
 {
-    setRelay(_disableSOLO, false);
+    setRelay(_chillerB, false);
     setRelay(_chiller, false);
 }
 

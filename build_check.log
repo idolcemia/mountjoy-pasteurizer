@@ -1,0 +1,40 @@
+Processing giga_r1_m7 (platform: ststm32; board: giga_r1_m7; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/ststm32/giga_r1_m7.html
+PLATFORM: ST STM32 (19.4.0) > Arduino Giga R1 (M7 core)
+HARDWARE: STM32H747XIH6 480MHz, 511.35KB RAM, 2MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, jlink, stlink)
+PACKAGES: 
+ - framework-arduino-mbed @ 4.4.1 
+ - tool-dfuutil-arduino @ 1.11.0 
+ - toolchain-gccarmnoneeabi @ 1.70201.0 (7.2.1)
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 84 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- lvgl @ 9.4.0
+|-- Arduino_GigaDisplay @ 1.0.2
+|-- Arduino_GigaDisplay_GFX @ 1.1.0
+|-- Arduino_GigaDisplayTouch @ 1.0.1
+|-- NTPClient @ 3.2.1
+|-- QueueArray @ 0.1.0
+|-- ArduinoJson @ 6.21.0
+|-- RampSoakPID @ 1.0.0+sha.d9e0cdc
+|-- Wire
+|-- Arduino_H7_Video @ 1.0
+|-- Diagnostic @ 1.0.0
+|-- Networking @ 1.0.0
+|-- RumpshiftLogger
+|-- Buildshift @ 1.0.0
+|-- NetworkManager @ 1.0.0
+|-- LvglHelper @ 1.0.0
+|-- Adafruit MAX31865 library @ 1.6.2
+Building in release mode
+Compiling .pio\build\giga_r1_m7\libe1f\lvgl\draw\sw\blend\helium\lv_blend_helium.S.o
+Checking size .pio\build\giga_r1_m7\firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [===       ]  26.0% (used 136128 bytes from 523624 bytes)
+Flash: [=======   ]  67.5% (used 1415688 bytes from 2097152 bytes)
+========================= [SUCCESS] Took 17.61 seconds =========================

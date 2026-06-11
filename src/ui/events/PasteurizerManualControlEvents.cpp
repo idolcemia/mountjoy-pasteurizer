@@ -24,13 +24,13 @@ extern "C"
     void ui_event_DisableSOLOEnabled(lv_event_t *e)
     {
         logButtonState("Disable SOLO", true);
-        pasteurizerRelays.activateDisableSOLO();
+        pasteurizerRelays.activateChillerB();
     }
 
     void ui_event_DisableSOLODisabled(lv_event_t *e)
     {
         logButtonState("Disable SOLO", false);
-        pasteurizerRelays.deactivateDisableSOLO();
+        pasteurizerRelays.deactivateChillerB();
     }
 
     /* ============================================================
@@ -123,47 +123,43 @@ extern "C"
         pasteurizerRelays.CycleButtonDisabled();
     }
 
+    void event_HeatnHoldPressed(lv_event_t *e)
+    {
+        currentMode = Mode::MODE_HEATING;
+        chillControl.reset();
+        heatControl.start();
+    }
 
+    void event_CoolnChillPressed(lv_event_t *e)
+    {
+        currentMode = Mode::MODE_COOLING;
+        heatControl.reset();
+        chillControl.start();
+    }
 
-void event_HeatnHoldPressed(lv_event_t * e)
-{
-currentMode = Mode::MODE_HEATING;
-chillControl.reset();
-heatControl.start();
-}
+    void event_StopButtonPressed(lv_event_t *e)
+    {
+        heatControl.stop();
+        chillControl.stop();
+        currentMode = Mode::MODE_MANUAL;
+    }
 
-void event_CoolnChillPressed(lv_event_t * e)
-{
-currentMode = Mode::MODE_COOLING;
-heatControl.reset();
-chillControl.start();
+    void event_PasteurizeButtonPressed(lv_event_t *e)
+    {
+        autoCycleEnabled = true;
+        lv_obj_add_state(ui_switchAuto, LV_STATE_CHECKED);
+        heatControl.start();
+    }
 
-}
+    void event_AutoButtonEnabled(lv_event_t *e)
+    {
+        autoCycleEnabled = true;
+    }
 
-   void event_StopButtonPressed(lv_event_t * e)
-{
-	heatControl.stop();
-    chillControl.stop();
-    currentMode = Mode::MODE_MANUAL;    
-}
-
-void event_PasteurizeButtonPressed(lv_event_t * e)
-{
-	autoCycleEnabled = true;
-    lv_obj_add_state(ui_switchAuto, LV_STATE_CHECKED);
-    heatControl.start();
-}
-
-void event_AutoButtonEnabled(lv_event_t * e)
-{
-	autoCycleEnabled = true;
-}
-
-void event_AutoButtonDisabled(lv_event_t * e)
-{
-	autoCycleEnabled = false;
-}
-
+    void event_AutoButtonDisabled(lv_event_t *e)
+    {
+        autoCycleEnabled = false;
+    }
 
     /* ============================================================
        Generic button handler

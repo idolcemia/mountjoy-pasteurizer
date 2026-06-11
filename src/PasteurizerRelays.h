@@ -9,7 +9,7 @@ class PasteurizerRelays
 {
 public:
     PasteurizerRelays(
-        int disableSOLO,
+        int chillerB,
         int freshWater,
         int floodPump,
         int wallHeater,
@@ -19,8 +19,8 @@ public:
     void begin();
 
     // Disable SOLO relay
-    void activateDisableSOLO();
-    void deactivateDisableSOLO();
+    void activateChillerB();
+    void deactivateChillerB();
 
     // Fresh Water relay
     void activateFreshWaterRelay();
@@ -50,7 +50,7 @@ public:
     void attachControllers(HeatControl *heatControl, ChillControl *chillControl);
 
 private:
-    int _disableSOLO;
+    int _chillerB;
     int _freshWater;
     int _floodPump;
     int _wallHeater;

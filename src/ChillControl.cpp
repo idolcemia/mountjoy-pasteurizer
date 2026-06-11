@@ -47,7 +47,6 @@ void ChillControl::stop()
     lv_obj_clear_state(ui_ChillerButton, LV_STATE_CHECKED);
     lv_obj_clear_state(ui_switchPump, LV_STATE_CHECKED);
     lv_bar_set_value(ui_setPointBar, 0, LV_ANIM_OFF);
-
 }
 void ChillControl::reset()
 {
@@ -78,15 +77,12 @@ void ChillControl::processControl()
         lv_obj_clear_state(ui_CoolSOLO, LV_STATE_CHECKED);
     }
 
-        // If set point reached or exceeded, transition to DONE state
-    if (_temp <= _tempSetPoint )
+    // If set point reached or exceeded, transition to DONE state
+    if (_temp <= _tempSetPoint)
     {
         stop();
-         _state = ChillControlState::CC_DONE;
-
+        _state = ChillControlState::CC_DONE;
     }
-   
-
 }
 float ChillControl::updateUI()
 {

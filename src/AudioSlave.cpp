@@ -1,12 +1,44 @@
 #include "AudioSlave.h"
 
 #include <Wire.h>
+#include "Globals.h"
+
+namespace
+{
+    struct AudioRequestMapEntry
+    {
+        const char *id;
+        int8_t code;
+    };
+
+    static constexpr AudioRequestMapEntry kAudioRequestMap[] = {
+        {"notice", 1},
+        {"alert_slowBuildLong", 2},
+        {"alert_immediateLong", 3},
+        {"alert_simple", 4},
+        {"reminder", 5},
+    };
+} // namespace
 
 AudioSlave *AudioSlave::_activeInstance = nullptr;
 
 AudioSlave::AudioSlave(int i2cAddress, int ledPin)
-    : _i2cAddress(i2cAddress), _ledPin(ledPin), _receivedValue(0)
+    : _i2cAddress(i2cAddress), _ledPin(ledPin), _receivedValue(0), _requestedEventCode(0)
 {
+}
+
+bool AudioSlave::tryMapRequestIdToCode(const String &requestId, int8_t &code)
+{
+    for (const AudioRequestMapEntry &entry : kAudioRequestMap)
+    {
+        if (requestId.equals(entry.id))
+        {
+            code = entry.code;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void AudioSlave::receiveEventThunk(int bytes)
@@ -38,6 +70,7 @@ void AudioSlave::begin()
 
 void AudioSlave::update()
 {
+
     if (_receivedValue == 0)
     {
         digitalWrite(_ledPin, HIGH);
@@ -60,9 +93,25 @@ void AudioSlave::receiveEvent(int bytes)
     }
 }
 
+bool AudioSlave::requestEvent(const String &requestId)
+{
+    Serial.println(String("Request ID ") + requestId);
+    int8_t mappedCode = 0;
+
+    if (!AudioSlave::tryMapRequestIdToCode(requestId, mappedCode))
+    {
+        return false;
+    }
+
+    _requestedEventCode = mappedCode;
+    requestEvent();
+
+    return true;
+}
+
 void AudioSlave::requestEvent()
 {
-    Wire.write(static_cast<uint8_t>(static_cast<int8_t>(_receivedValue)));
+    Wire.write(static_cast<uint8_t>(static_cast<int8_t>(_requestedEventCode)));
 }
 
 int AudioSlave::getLastReceivedValue() const

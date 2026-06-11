@@ -25,10 +25,13 @@
 #include <HttpResponse.h>
 #include <Users.h>
 #include <Diagnostic.h>
+#include "AudioSlave.h"
 
 #include "config.h"
 #include "Globals.h"
 #include "ui/screens/labels/ui_GlobalLabels.h"
+
+extern AudioSlave audioSlave;
 
 Arduino_H7_Video Display(800, 480, GigaDisplayShield);
 Arduino_GigaDisplayTouch TouchDetector;
@@ -37,7 +40,6 @@ WiFiClientWrapper testClient;
 
 unsigned long lastTempUpdate = 0;
 const unsigned long TEMP_UPDATE_INTERVAL = 1000;
-
 
 enum Mode
 {
@@ -49,7 +51,7 @@ enum Mode
 };
 
 int currentMode = MODE_MANUAL;
-bool autoCycleEnabled = true; // If true, will automatically transition from heating to cooling mode when heat control is done 
+bool autoCycleEnabled = true; // If true, will automatically transition from heating to cooling mode when heat control is done
 
 void _log();
 
@@ -120,7 +122,7 @@ void loop()
                 break;
             case HeatControlState::HC_DONE:
                 heatControl.reset();
-                if (autoCycleEnabled && chillControl._state == ChillControlState::CC_RESET) // If auto cycle is enabled and we're not already cooling, transition to cooling mode
+                if (autoCycleEnabled)
                 {
                     currentMode = MODE_COOLING;
                     chillControl.start();
@@ -132,7 +134,7 @@ void loop()
             break;
         case MODE_COOLING:
 
-        logger.info("[ChillControlState] " + String(chillControl._state));
+            logger.info("[ChillControlState] " + String(chillControl._state));
 
             chillControl.processControl(); // Let the chill control logic determine if we need to switch to glycol chilling or pause based on current temp and state
 
