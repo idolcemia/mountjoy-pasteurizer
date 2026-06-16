@@ -51,7 +51,7 @@ enum Mode
 };
 
 int currentMode = MODE_MANUAL;
-bool autoCycleEnabled = true; // If true, will automatically transition from heating to cooling mode when heat control is done
+bool autoCycleEnabled = false; // If true, will automatically transition from heating to cooling mode when heat control is done
 
 void _log();
 
@@ -109,8 +109,6 @@ void loop()
 
             logger.info("[HeatControlState] " + String(heatControl._state));
 
-            heatControl.processControl(); // Let the heat control logic determine if we need to pause or stop heating based on current temp and state
-
             switch (heatControl._state)
             {
             default:
@@ -129,6 +127,8 @@ void loop()
                 }
                 break;
             }
+
+            heatControl.processControl(); // Let the heat control logic determine if we need to pause or stop heating based on current temp and state
 
             heatControl.updateUI(); // Update heat control UI elements based on current temp and state
             break;

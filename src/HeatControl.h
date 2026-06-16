@@ -31,8 +31,8 @@ private:
     float _tempSetPoint;
     float _temp;
     float _startingTemp;
-    unsigned long _holdTimeMinutes;
-
+    float _holdTimeMinutes;
+    static unsigned long _pauseStartTime;
     const float _tempAllowedDeviation = 5; // If the flood temperature exceeds the probe
                                            // temperature by more than this amount, pause heating to prevent boiling.
 

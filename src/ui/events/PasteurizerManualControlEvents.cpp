@@ -5,6 +5,9 @@
 #include "Globals.h"
 #include "ui/screens/labels/ui_GlobalLabels.h"
 #include "ui/screens/ui_GlobalButtons.h"
+#include "AudioSlave.h"
+
+extern AudioSlave audioSlave;
 
 #ifdef __cplusplus
 extern "C"

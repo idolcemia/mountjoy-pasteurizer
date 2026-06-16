@@ -8,6 +8,9 @@
 
 extern AudioSlave audioSlave;
 
+// Initialize static member variable
+unsigned long HeatControl::_pauseStartTime = 0;
+
 // ---------------- Constructor ----------------
 HeatControl::HeatControl(
     PasteurizerRelays &relays,
@@ -80,13 +83,12 @@ float HeatControl::getTempC()
 
 void HeatControl::processControl()
 {
-    static unsigned long _pauseStartTime;
 
     float floodTemp = floodTemperatureSensor.getTempC();
 
     _temp = getTempC();
 
-    if (floodTemp > 60.0)
+    if (floodTemp >= 60.0)
     {
 
         // In the latter stage of heating, if the flood temperature exceeds the probe temperature by more than the allowed deviation,
@@ -95,7 +97,7 @@ void HeatControl::processControl()
 
         if (floodTemp - _temp > _tempAllowedDeviation)
         {
-            if (_state != HeatControlState::HC_PAUSE)
+            if (_state == HeatControlState::HC_RUN)
             {
                 pause();
             }
@@ -111,16 +113,16 @@ void HeatControl::processControl()
     // Instead, we start a timer and only transition to DONE if we've been above the setpoint for the duration of the hold time. This allows for some overshoot while still ensuring we hold at the target temperature for the desired amount of time.
     if (_temp >= _tempSetPoint)
     {
-        if (_state != HeatControlState::HC_PAUSE)
-        {
-            pause();
-            _pauseStartTime = millis();
-        }
+        pause();
+        _pauseStartTime = _pauseStartTime == 0 ? millis() : _pauseStartTime;
+
         logger.info("MS Elapsed: " + String(millis() - _pauseStartTime) + " hold for " + String(_holdTimeMinutes * 60000));
 
         if ((millis() - _pauseStartTime) >= (_holdTimeMinutes * 60000))
         {
+            _pauseStartTime = 0; // Reset the pause start time
             _state = HeatControlState::HC_DONE;
+            stop();
         }
     }
 }
