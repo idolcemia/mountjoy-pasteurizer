@@ -41,7 +41,7 @@ void ChillControl::stop()
     _relays.deactivateChillerRelay();
     _relays.deactivateRecirculationPumpRelay();
     _relays.deactivateFloodPumpRelay();
-    _relays.deactivateChillerRelay();
+    _relays.deactivateFreshWaterRelay();
     lv_obj_clear_state(ui_switchOperation, LV_STATE_CHECKED);
     lv_obj_clear_state(ui_CoolSOLO, LV_STATE_CHECKED);
     lv_obj_clear_state(ui_ChillerButton, LV_STATE_CHECKED);
@@ -67,11 +67,12 @@ void ChillControl::processControl()
     _temp = getTempC();
 
     // If time to switch to glycol chilling, activate chiller relay and update UI accordingly
-    if (_temp <= _glycolChillSetPoint)
+    if (_temp <= _glycolChillSetPoint || !_state == ChillControlState::CC_CHILL)
     {
         _relays.activateChillerRelay();
         _relays.activateRecirculationPumpRelay();
         _relays.deactivateFreshWaterRelay();
+        _state = ChillControlState::CC_CHILL;
         lv_obj_add_state(ui_ChillerButton, LV_STATE_CHECKED);
         lv_obj_add_state(ui_switchPump, LV_STATE_CHECKED);
         lv_obj_clear_state(ui_CoolSOLO, LV_STATE_CHECKED);

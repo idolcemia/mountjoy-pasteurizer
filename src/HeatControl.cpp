@@ -86,26 +86,25 @@ void HeatControl::processControl()
 
     float floodTemp = floodTemperatureSensor.getTempC();
 
-    _temp = getTempC();
+    getTempC(); // Update _temp with the latest probe temperature
 
-    if (floodTemp >= 60.0)
+    // In the latter stage of heating, if the flood temperature exceeds the probe temperature by more than the allowed deviation,
+    // pause heating to prevent overshooting and potential safety hazard.
+    // Once we're below that threshold again, transition back to RUN state if we're not already there.
+
+    logger.info("Flood Temp: " + String(floodTemp) + "°C, Probe Temp: " + String(_temp) + "°C, State: " + String(_state));
+
+    if ((floodTemp - _temp) > _tempAllowedDeviation && floodTemp >= 00.0 && _state == HeatControlState::HC_RUN)
     {
+        logger.info("Flood temp exceeds probe temp by more than " + String(_tempAllowedDeviation) + "°C. Pausing heating to prevent overshoot.");
+        pause();
+    }
 
-        // In the latter stage of heating, if the flood temperature exceeds the probe temperature by more than the allowed deviation,
-        // pause heating to prevent overshooting and potential safety hazard.
-        // Once we're below that threshold again, transition back to RUN state if we're not already there.
 
-        if (floodTemp - _temp > _tempAllowedDeviation)
-        {
-            if (_state == HeatControlState::HC_RUN)
-            {
-                pause();
-            }
-        }
-        else if (_state == HeatControlState::HC_PAUSE && floodTemp - _temp <= _tempAllowedDeviation * 0.75) // Add some hysteresis to prevent rapid toggling
-        {
-            resume();
-        }
+  if ((floodTemp - _temp) <= _tempAllowedDeviation * 0.75 && _state == HeatControlState::HC_PAUSE) // Add some hysteresis to prevent rapid toggling
+    {
+        logger.info("Flood temp is now within acceptable range of probe temp. Resuming heating.");
+        resume();
     }
 
     // If setpoint is reached, transition to DONE state and stop heating.
@@ -113,10 +112,20 @@ void HeatControl::processControl()
     // Instead, we start a timer and only transition to DONE if we've been above the setpoint for the duration of the hold time. This allows for some overshoot while still ensuring we hold at the target temperature for the desired amount of time.
     if (_temp >= _tempSetPoint)
     {
-        pause();
-        _pauseStartTime = _pauseStartTime == 0 ? millis() : _pauseStartTime;
+        if (_state == HeatControlState::HC_RUN)
+        {
+            logger.info("Setpoint reached. Starting hold timer for " + String(_holdTimeMinutes) + " minutes.");
+            
+            _pauseStartTime = _pauseStartTime == 0 ? millis() : _pauseStartTime;
+            pause();
+        }
+     
+        if (_state == HeatControlState::HC_PAUSE)
+        {
+            logger.info("Hold timer running. Elapsed time: " + String((millis() - _pauseStartTime) / 1000.0) + " seconds.");
+        }   
 
-        logger.info("MS Elapsed: " + String(millis() - _pauseStartTime) + " hold for " + String(_holdTimeMinutes * 60000));
+
 
         if ((millis() - _pauseStartTime) >= (_holdTimeMinutes * 60000))
         {
@@ -130,7 +139,7 @@ void HeatControl::processControl()
 float HeatControl::updateUI()
 {
 
-    float tempPercent = min(100.0, max(0.0, (_temp - _startingTemp) / (_tempSetPoint - _startingTemp) * 100.0));
+    //   float tempPercent = min(100.0, max(0.0, (_temp - _startingTemp) / (_tempSetPoint - _startingTemp) * 100.0));
 
     //  lv_slider_set_value(ui_sliderHeat, int(tempPercent), LV_ANIM_OFF);
     // lv_arc_set_value(ui_arcHeat, int(_temp));

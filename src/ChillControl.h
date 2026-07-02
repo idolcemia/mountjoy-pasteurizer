@@ -13,7 +13,8 @@ enum ChillControlState
     CC_RESET = 0,
     CC_RUN = 1,
     CC_PAUSE = 2,
-    CC_DONE = 3
+    CC_DONE = 3,
+    CC_CHILL = 4
 };
 
 /**

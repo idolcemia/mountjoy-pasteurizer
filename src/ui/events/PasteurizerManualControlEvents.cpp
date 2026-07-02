@@ -144,6 +144,8 @@ extern "C"
     {
         heatControl.stop();
         chillControl.stop();
+        lv_obj_remove_state(ui_switchAuto, LV_STATE_CHECKED);
+        autoCycleEnabled = false;
         currentMode = Mode::MODE_MANUAL;
     }
 
@@ -151,7 +153,7 @@ extern "C"
     {
         autoCycleEnabled = true;
         lv_obj_add_state(ui_switchAuto, LV_STATE_CHECKED);
-        heatControl.start();
+        event_HeatnHoldPressed(e);
     }
 
     void event_AutoButtonEnabled(lv_event_t *e)

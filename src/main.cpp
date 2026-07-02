@@ -109,6 +109,7 @@ void loop()
 
             logger.info("[HeatControlState] " + String(heatControl._state));
 
+            heatControl.processControl(); // Let the heat control logic determine if we need to pause or stop heating based on current temp and state
             switch (heatControl._state)
             {
             default:
@@ -119,19 +120,20 @@ void loop()
             case HeatControlState::HC_PAUSE:
                 break;
             case HeatControlState::HC_DONE:
-                heatControl.reset();
+
                 if (autoCycleEnabled)
                 {
+
                     currentMode = MODE_COOLING;
+                    heatControl.reset();
                     chillControl.start();
                 }
                 break;
             }
 
-            heatControl.processControl(); // Let the heat control logic determine if we need to pause or stop heating based on current temp and state
-
             heatControl.updateUI(); // Update heat control UI elements based on current temp and state
             break;
+
         case MODE_COOLING:
 
             logger.info("[ChillControlState] " + String(chillControl._state));
@@ -151,6 +153,9 @@ void loop()
                 break;
 
             case ChillControlState::CC_PAUSE:
+                break;
+
+            case ChillControlState::CC_CHILL:
                 break;
 
             case ChillControlState::CC_DONE:
